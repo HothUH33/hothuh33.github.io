@@ -351,8 +351,8 @@ addLayer("a", {
     },
     getShDistRatio() {
       let dist = new Decimal(8.8e26)
-      let dist1 = tmp.a.getShDist
-      let ratio = dist.div(dist1)
+      let dist1 = tmp.a.getShDist.max(1)
+      let ratio = dist.div(dist1).max(1)
       return ratio
     },
     getHCStart() {
@@ -1042,25 +1042,25 @@ addLayer("ac", {
             },
 			32: {
 				name: "A Bit Closer...",
-				done() { return tmp.a.getShDistRatio.gte(10) },
+				done() { return tmp.a.getShDistRatio>=10 },
 				tooltip: "Reduce the distance to 9.3e9 light-years.",
 				image: "images/achs/12.png",
 			},
 		  33: {
 				name: "Between Group of Galaxies...",
-				done() { return tmp.a.getShDistRatio.gte(1e3)},			
+				done() { return tmp.a.getShDistRatio>=1e3},			
         tooltip: "Reduce the distance to 9.3e7 light-years.",
 				image: "images/achs/13.png",
 			},
 			34: {
 				name: "Shards between Milky Ways...",
-				done() { return tmp.a.getShDistRatio.gte(1e6) },
+				done() { return tmp.a.getShDistRatio>=1e6 },
 				tooltip: "Reduce the distance to 93000 light-years.",
 				image: "images/achs/14.png",
 			},
 			35: {
 				name: "ARE YA FU**ING SERIIOUS!?",
-				done() { return challengeCompletions("a", 11).gte(10) },
+				done() { return challengeCompletions("a", 11)>=10 },
 				tooltip: "Complete first repeatable Aether challenge",
 				image: "images/achs/15.png",
 			},
