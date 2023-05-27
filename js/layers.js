@@ -670,7 +670,7 @@ addLayer("a", {
                 cols: 2,
                 11: {
                         name: "Anti-Distance", 
-                        challengeDescription: "Distance Ratio is divide Existence Shard gain.",
+                        challengeDescription: "Distance Ratio divides Existence Shard gain.",
                         rewardDescription: "Add to row2 Aether buyables effect base.",
                         rewardEffect(){
                                 let comps = challengeCompletions("a", 11)
@@ -1042,32 +1042,32 @@ addLayer("ac", {
             },
 			32: {
 				name: "A Bit Closer...",
-				done() { return getShDistRatio().gte(10) },
+				done() { return tmp.a.getShDistRatio.gte(10) },
 				tooltip: "Reduce the distance to 9.3e9 light-years.",
 				image: "images/achs/12.png",
 			},
 		  33: {
 				name: "Between Group of Galaxies...",
-				done() { return getShDistRatio().gte(1e3)},			
+				done() { return tmp.a.getShDistRatio.gte(1e3)},			
         tooltip: "Reduce the distance to 9.3e7 light-years.",
 				image: "images/achs/13.png",
 			},
 			34: {
 				name: "Shards between Milky Ways...",
-				done() { return getShDistRatio().gte(1e6) },
+				done() { return tmp.a.getShDistRatio.gte(1e6) },
 				tooltip: "Reduce the distance to 93000 light-years.",
 				image: "images/achs/14.png",
 			},
 			35: {
 				name: "ARE YA FU**ING SERIIOUS!?",
 				done() { return challengeCompletions("a", 11).gte(10) },
-				tooltip: "Complete repeatable Aether challenge",
+				tooltip: "Complete first repeatable Aether challenge",
 				image: "images/achs/15.png",
 			},
 			36: {
-				name: "Aetherize",
+				name: "Aetherize Aether",
 				done() { return player.a.points.gte(100) },
-				tooltip: "Unlock the Aether layer.",
+				tooltip: "Unlock the ???.",
 				image: "images/achs/15.png",
 			},
     },
@@ -1223,7 +1223,7 @@ addLayer("inf", {
         return new Decimal(1)
     },
     row: "side", // Row the layer is in on the tree (0 is the first row)
-    layerShown(){return true},
+    layerShown(){return (player.inf.points.gte(1e277))},
 })
 addLayer("eter", {
     name: "Force", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -1256,5 +1256,5 @@ addLayer("eter", {
     },
     row: "side", // Row the layer is in on the tree (0 is the first row)
     branches: [["inf","#d837a9"]],
-    layerShown(){return (player.inf.points.gte(1e3))},
+    layerShown(){return (player.inf.points.gte(1e176))},
 })
