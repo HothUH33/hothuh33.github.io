@@ -989,7 +989,7 @@ addLayer("ac", {
 			34: {
 				name: "Are You <h3 style=opacity:0.5>Reading</h3> His Book?",
 				done() { return tmp.a.getShDistRatio>=6.2e9 },
-				tooltip: "Reduce the distance to 15 light-years.<br><h3 style=opacity:0.25>This is a reference to one of mod author</h3>.",
+				tooltip: "Reduce the distance to 15 light-years.",
 				image: "images/achs/14.png",
 			},
 			35: {
