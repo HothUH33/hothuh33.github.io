@@ -950,6 +950,12 @@ addLayer("ac", {
 				tooltip: "Complete the Anti-Shard Supremacy and Shattered Existence challenges.",
 				image: "images/achs/13.png",
 			},
+			24: {
+				name: "The Pain is Gone... I hope so...",
+				done() { return player.sp.challenges.length>=4 },
+				tooltip: "Complete all Space challenges.",
+				image: "images/achs/14.png",
+			},
 			25: {
 				name: "Black Hole MUST be nerfed!",
 				done() { return player.bh.points.gte(1e12) },
