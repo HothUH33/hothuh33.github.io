@@ -1,7 +1,3 @@
-function getAChallengeTotal(){
-        return challengeCompletions("a", 11) + challengeCompletions("a", 12) + challengeCompletions("a", 21) + challengeCompletions("a", 22)
-}
-
 addLayer("p", {
     name: "Primordial Essence", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "P", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -22,7 +18,7 @@ addLayer("p", {
     exponent: 1.05, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         let mult = new Decimal(1)
-        if (hasUpgrade('p', 15)) mult = mult.times(upgradeEffect('p', 15))
+        if (hasUpgrade('p', 15)) mult = mult.div(upgradeEffect('p', 15))
         return mult
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
@@ -67,9 +63,9 @@ addLayer("p", {
     description: "Divide Primordial Essence requirement by Existence Shard at increased rate.",
     cost: new Decimal(12),    
         effect() {
-        return player.points.add(1).pow(-0.3)
+        return player.points.add(1).pow(0.3)
     },
-    effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+    effectDisplay() { return "/"+format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
      },          31: {title: "Theory of Aether",
     description: "Unlock the Aether.",
     cost: new Decimal(25),
@@ -153,6 +149,7 @@ addLayer("sp", {
 			let keep = [];
 			if (layers[resettingLayer].row > this.row) layerDataReset("sp", keep)},
 		challenges: {
+      rows: 2,
       cols: 3,
 			11: {
 				name: "Existence Weakening",
@@ -164,12 +161,6 @@ addLayer("sp", {
 				currencyDisplayName: "Primordial Essence",
 				currencyInternalName: "Primordial Essence",
 				rewardDescription: "Raise Existence Shard gain (before upgrades) to 1.15.",
-        onStart(testInput=false) {
-					if (testInput) {
-						doReset("f",true);
-						player.sp.activeChallenge = 11;
-						updateTemp();
-					} },
         },
 			12: 
       {
@@ -182,12 +173,6 @@ addLayer("sp", {
 				currencyDisplayName: "Existence Shards",
 				currencyInternalName: "Existence Shards",
 				rewardDescription: "Weaken the P.E. requirement.",
-        onStart(testInput=false) {
-					if (testInput) {
-						doReset("f",true);
-						player.sp.activeChallenge = 12;
-						updateTemp();
-					} },
         },
       13: {
 				name: "Shattered Existence",
@@ -199,12 +184,6 @@ addLayer("sp", {
 				currencyDisplayName: "Existence Shards",
 				currencyInternalName: "Existence Shards",
 				rewardDescription() { return "Add "+format(player.points.add(1).pow(0.05))+" to Existence Shard gain base."},
-        onStart(testInput=false) {
-					if (testInput) {
-						doReset("f",true);
-						player.sp.activeChallenge = 13;
-						updateTemp();
-					} },
         },
       21: {
 				name: "Existenceless",
@@ -215,12 +194,6 @@ addLayer("sp", {
 				goal() { return new Decimal(player.current=="p"?"5":"100") },
 				currencyDisplayName: "Existence Shards",
 				rewardDescription() { return "Add "+format(player.points.add(1).pow(0.005))+" to Existence Shard exponent and keep BH layer on complete. And finally, keep PE upgrades all row2 resets!"},
-        onStart(testInput=false) {
-					if (testInput) {
-						doReset("p",true);;
-						player.sp.activeChallenge = 21;
-						updateTemp();
-					} },
         },
 },  
 })
@@ -346,7 +319,9 @@ addLayer("a", {
     },
     getShDistEff() {
         let eff = tmp.a.getShDist.div(8.8e26).pow(-0.05).max(1)
-        if (eff.gte(1.4)) eff = eff.div(1.4).pow(0.5).mul(1.4)
+        if (eff.gte(1.2)) eff = eff.div(1.2).pow(0.5).mul(1.2)
+        if (eff.gte(1.4)) eff = eff.div(1.4).pow(0.45).mul(1.4)
+        if (eff.gte(1.6)) eff = eff.div(1.6).pow(0.40).mul(1.6)
         return eff
     },
     getShDistRatio() {
@@ -401,7 +376,6 @@ addLayer("a", {
                     }],
             "blank",
             "upgrades",
-            "milestones",
             ]
         },"Buyables": {
         content:[
@@ -423,13 +397,6 @@ addLayer("a", {
             "buyables",
             ]
         },
-    },
-    milestones: {
-      0: {
-        requirementDescription: "Primal Aether (5 Aethers)",
-        effectDescription: "Unlock a buyable in another tab (W.I.P)",
-        done() { return player.a.best.gte(5)},
-    },
    },
     upgrades: 
     {  11: {title: "Shard Far-Out Convergence",
@@ -471,14 +438,14 @@ addLayer("a", {
     description: "Enhance the row1 upgrades based on hardcap start.",
     cost: new Decimal(30),
             effect() {
-          return (tmp.a.getHCStart).log2().pow(0.35)},
+          return (tmp.a.getHCStart.add(1)).log2().pow(0.35)},
     effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
 		unlocked() {return (hasUpgrade('a',15)) },
      },22: {title: "Stronger Aetherization",
     description: "Enhance the row1 upgrades based on R.BH mass. <h3>Across the Stars</h3> effect affects Aether req.",
     cost: new Decimal(35),
             effect() {
-          return (player.bh.points.div(1e24)).pow(0.15).max(1)},
+          return (player.bh.points.div(1e24).add(1)).pow(0.15).max(1)},
     effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
 		unlocked() {return (hasUpgrade('a',15)) },
      },23: {title: "Enhanced Existence",
@@ -658,46 +625,13 @@ addLayer("a", {
                 Effect: " + format(tmp.a.buyables[23].effect)+"x\n\
                 Amount: " + formatWhole(getBuyableAmount("a", 13))
             },
-            unlocked() { return getBuyableAmount("a", 22).gte(100) }, 
+            unlocked() { return getBuyableAmount("a", 22).gte(50) }, 
             canAfford() {
                     tmp.a.getShDistRatio.gte(tmp.a.buyables[23].cost)},
             buy() { 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
             },
         },
-    challenges:{
-                rows: 2,
-                cols: 2,
-                11: {
-                        name: "Anti-Distance", 
-                        challengeDescription: "Distance Ratio divides Existence Shard gain.",
-                        rewardDescription: "Add to row2 Aether buyables effect base.",
-                        rewardEffect(){
-                                let comps = challengeCompletions("a", 11)
-                                let ret = 1
-                                if (comps >= 2) ret = ret.add(player.a.points.pow(0.1))
-                                if (comps >= 4) ret = ret.add(player.a.points.pow(0.1))
-                                if (comps >= 6) ret = ret.add(player.a.points.pow(0.1))
-                                if (comps >= 8) ret = ret.add(player.a.points.pow(0.1))
-                                return ret
-                        },
-                        rewardDisplay(){
-                                let comps = "You have " + formatWhole(challengeCompletions("a", 11)) + " challenge completions, "
-                                let eff = "and that adds a " + format(layers.a.challenges[11].rewardEffect()) + " to the base."
-                                return comps + eff
-                        },
-                        unlocked(){
-                                return hasUpgrade('a',23)
-                        },
-                        goal(){
-                                let comps = challengeCompletions("a", 11)
-                                let base = 1e10
-                                return Decimal.pow(base)
-                        },
-                        currencyInternalName: "points",
-                        completionLimit: 10,
-                },
-    },
   },
     row: 1, // Row the layer is in on the tree (0 is the first row)
     branches: ["sp","t"],
@@ -1016,12 +950,6 @@ addLayer("ac", {
 				tooltip: "Complete the Anti-Shard Supremacy and Shattered Existence challenges.",
 				image: "images/achs/13.png",
 			},
-			24: {
-				name: "The Pain is Gone... I hope so...",
-				done() { return player.sp.challenges.length>=4 },
-				tooltip: "Complete all Space challenges.",
-				image: "images/achs/14.png",
-			},
 			25: {
 				name: "Black Hole MUST be nerfed!",
 				done() { return player.bh.points.gte(1e12) },
@@ -1047,21 +975,21 @@ addLayer("ac", {
 				image: "images/achs/12.png",
 			},
 		  33: {
-				name: "Between Group of Galaxies...",
-				done() { return tmp.a.getShDistRatio>=1e3},			
+				name: "Between Milky Ways...",
+				done() { return tmp.a.getShDistRatio>=1e6},			
         tooltip: "Reduce the distance to 9.3e7 light-years.",
 				image: "images/achs/13.png",
 			},
 			34: {
-				name: "Shards between Milky Ways...",
-				done() { return tmp.a.getShDistRatio>=1e6 },
-				tooltip: "Reduce the distance to 93000 light-years.",
+				name: "Are You <h3 style=opacity:0.5>Reading</h3> His Book?",
+				done() { return tmp.a.getShDistRatio>=6.2e9 },
+				tooltip: "Reduce the distance to 15 light-years.<br><h3 style=opacity:0.25>This is a reference to one of mod author</h3>.",
 				image: "images/achs/14.png",
 			},
 			35: {
 				name: "ARE YA FU**ING SERIIOUS!?",
-				done() { return challengeCompletions("a", 11)>=10 },
-				tooltip: "Complete first repeatable Aether challenge",
+				done() { return player.points.gte(1e20) },
+				tooltip: "???",
 				image: "images/achs/15.png",
 			},
 			36: {
@@ -1102,18 +1030,22 @@ addLayer("stat", {
                 let g = player.bh.unlocked&&(inChallenge("sp",13)||inChallenge("sp",21)||hasChallenge("sp",21))?"You have <h2 style='color: #222222; text-shadow: #222222 0px 0px 10px;'>"+formatWhole(player.bh.points)+"</h2> Black hole masses.<br>":""
                 let h = player.f.unlocked?"You have <h2 style = color:#f56d53;>"+formatWhole(player.t.points)+"</h2> Forces.<br>":""
                 let i = player.s.unlocked?"You have <h2 style = color:#4bfc90;>"+formatWhole(player.s.points)+"</h2> Souls.<br><br>":""
+                let inf = player.inf.unlocked?"You have <h2 style = color:#4bfc90;>"+formatWhole(player.inf.points)+"</h2> Infinity Shards and <h2 style = color:#4bfc90;>"+formatWhole(player.inf.infpow)+"</h2> Infinity Power.<br><br>":""
                 let sp13 = inChallenge("sp",13)?"<h3>Shattered Existence</h3> progress <h2 style = color:#6ae67e;>"+format((player.points.div(5000)).times(100).min(100))+"%</h2>.<br>":""
                 let sp13t = inChallenge("sp",13)&&!player.points.gte(5000)?"If your Existence Shard gain remains constant, the challenge goal will be reached in <h2 style = color:#ff0000;>"+formatTime(time13)+"</h2><br>":""
                 let sp13c = inChallenge("sp",13)&&player.points.gte(5000)?"Challenge goal was reached <h2 style = color:#6ae67e;>"+formatTime(time13c)+"</h2> ago<br>":""
                 let sp21 = inChallenge("sp",21)?"<h3>Existenceless</h3> progress <h2 style = color:#6ae67e;>"+format((player.points.div(100)).times(100).min(100))+"%</h2>.<br>":""
                 let sp21t = inChallenge("sp",21)&&!player.points.gte(100)?"If your Existence Shard gain remains constant, the challenge goal will be reached in <h2 style = color:#ff0000;>"+formatTime(time21)+"</h2><br>":""
                 let sp21c = inChallenge("sp",21)&&player.points.gte(100)?"Challenge goal was reached <h2 style = color:#6ae67e;>"+formatTime(time21c)+"</h2> ago<br>":""
-                return a+b+c+d+e+f+g+h+i+sp13+sp13t+sp13c+sp21+sp21t+sp21c
+                let t = (player.null.points.add(1.78e308).div(getPointGen().add(1)))
+                let inft = "If Existence Shard gain remains constant, then you can reach Infinity in "+formatTime(t)+""
+                return a+b+c+d+e+f+g+h+i+inf+sp13+sp13t+sp13c+sp21+sp21t+sp21c+inft
                 }
             }],
             "blank",
             "blank",
           ["bar","rti"],
+          ["bar","rte"],
             ]
         },
         "Shards Representation": { // From AD NG+++
@@ -1148,6 +1080,28 @@ addLayer("stat", {
             }],
             ],
         },
+                "Spelling": {
+                        content: [
+                                ["display-text", function(){
+                                        let corr = numCorrectLetters(player.targetWord)
+                                        let wordUpper = player.targetWord.toLocaleUpperCase()
+                                        let start = "<bdi style='font-size: 300%'>"
+                                        let goodPart = "<bdi style='color:#FF0000'>" + wordUpper.slice(0,corr) + "</bdi>"
+                                        let badPart  = "<bdi style='color:#993333'>" + wordUpper.slice(corr) + "</bdi>"
+                                        return start + goodPart + badPart + "</bdi>"
+                                }],
+                                ["display-text", function(){
+                                        let a = "You have spelled " + formatWhole(player.wordsSpelled)
+                                        let b = " words correctly!"
+                                        let c = "<br><br><br><br><br><br>"
+                                        let d = "<br>Press space to get a new word.<br>This is just a minigame, so you can safely ignore it :)"
+                                        return c + c + a + b + d
+                                }],
+                        ],
+                        unlocked(){
+                                return true
+                        }
+                },
         },
     bars: {
         rti: {
@@ -1155,9 +1109,20 @@ addLayer("stat", {
             width: 650,
             height: 75,
             progress() { return Math.log10(player.points)/Math.log10(1.78e308) },
-            display() { return "Road to Infinity<br>Completed: "+ format((Math.log10(player.points)/Math.log10(1.78e308))*100) +"%" },
-            fillStyle(){return {'background-color':"#ff66ff"}},
-            instant: true
+            display() { return "<h4 style = 'color:#b67f33; text-shadow: #000000 0px 0px 10px;'>Road to Infinity</h4><br>Completed: "+ format((Math.log10(player.points)/Math.log10(1.78e308))*100) +"%" },
+            fillStyle(){return {'background-color':"#b67f33"}},
+            instant: true,
+            unlocked() {return !player.inf.unlocked},
+        },
+        rte: {
+            direction: RIGHT,
+            width: 650,
+            height: 75,
+            progress() { return Math.log10(player.inf.points)/Math.log10(1.78e308) },
+            display() { return "<h4 style = 'color:#a230d0; text-shadow: #000000 0px 0px 10px;'>Road to Eternity</h4><br>Completed: "+ format((Math.log10(player.inf.points+1)/Math.log10(1.78e308))*100) +"%" },
+            fillStyle(){return {'background-color':"#b341e0"}},
+            instant: true,
+            unlocked() {return player.inf.unlocked},
         },
     },
 })
@@ -1202,7 +1167,12 @@ addLayer("inf", {
 		  	best: new Decimal(0),
 		  	total: new Decimal(0),
         time: new Decimal(0),
-			  unlockOrder: 0,
+        //Infinity Dims
+        infpow: new Decimal(0),
+        dim1: new Decimal(0),
+        dim2: new Decimal(0),
+        dim3: new Decimal(0),
+        dim4: new Decimal(0),
     }},
     color: "#b67f33",
     prestigeButtonText() { 
@@ -1210,11 +1180,11 @@ addLayer("inf", {
          (Decimal.gte(tmp[this.layer].resetGain, 1000) ? "" : "<br/>Next at " + formatWhole(tmp[this.layer].nextAt) + " Existence Shards")
     },
     requires() { return new Decimal(1.78e308)}, // Can be a function that takes requirement increases into account
-    resource: "Infinity Shards", // Name of prestige currency
+    resource: "Infinity Shards⧜", // Name of prestige currency
     baseResource: "Existence Shards", // Name of resource prestige is based on
     baseAmount() {return player.points}, // Get the current amount of baseResource
     type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
-    exponent: 1.15, // Prestige currency exponent
+    exponent: 0.0085, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
         return mult
@@ -1222,8 +1192,173 @@ addLayer("inf", {
     gainExp() { // Calculate the exponent on main currency from bonuses
         return new Decimal(1)
     },
-    row: "side", // Row the layer is in on the tree (0 is the first row)
-    layerShown(){return (player.inf.points.gte(1e277))},
+    getIDimBoost() {
+        return new Decimal(1)
+    },
+    update(diff) {
+        if (player.inf.buyables[11]) player.inf.infpow = player.inf.infpow.add((tmp.inf.buyables[11].effect).times(diff));
+        if (player.inf.buyables[12]) player.inf.buyables[11] = player.inf.buyables[11].add((tmp.inf.buyables[12].effect).times(diff));
+        if (player.inf.buyables[13]) player.inf.buyables[12] = player.inf.buyables[12].add((tmp.inf.buyables[13].effect).times(diff));
+        if (player.inf.buyables[14]) player.inf.buyables[13] = player.inf.buyables[13].add((tmp.inf.buyables[14].effect).times(diff));
+        if (player.eter.buyables[11]) player.inf.buyables[14] = player.inf.buyables[14].add((player.eter.eterpow).times(diff));
+    },
+    buyables: {
+    11: {
+			title: "Infinity Dimension I",
+        cost() { 
+                let x = player.inf.dim1
+                let cost = Decimal.pow(10, x)
+                return cost
+               },
+            base() { 
+                return new Decimal(10)
+            },
+            total() {
+                let total = getBuyableAmount("inf", 11)
+                return total
+            },
+            bought() {
+                let bought = player.inf.dim1
+                return bought
+            },
+			      effect() { // Effects of owning x of the items, x is a decimal
+                let x = player.inf.dim1
+                let base = tmp.inf.buyables[11].base
+                return (Decimal.pow(base,x));
+            },
+			      display() { // Everything else displayed in the buyable button after the title
+                return "which will generate "+format(this.effect())+" Infinity Power per second.\n\
+                Cost: " + format(tmp.inf.buyables[11].cost)+" Infinity Shards\n\
+                Effect: " + format(tmp.inf.buyables[11].effect)+"x\n\
+                Amount: " + formatWhole(getBuyableAmount("inf", 11))
+            },
+            unlocked() { return player.inf.unlocked }, 
+            canAfford() {
+                    return player.inf.points.gte(tmp.inf.buyables[11].cost)},
+            buy() { 
+                player[this.layer].points = player[this.layer].points.sub(this.cost())
+                player.inf.dim1 = player.inf.dim1.add(1).max(1)
+                player[this.layer].buyables[this.id] = player[this.layer].buyables[this.id].add(1).max(1)
+            },
+        },
+    12: {
+			title: "Infinity Dimension II",
+        cost() { 
+                let x = player.inf.dim2
+                let cost = Decimal.pow(1e2, x)
+                return cost
+               },
+            base() { 
+                return new Decimal(10)
+            },
+            total() {
+                let total = getBuyableAmount("inf", 12)
+                return total
+            },
+            bought() {
+                let bought = player.inf.dim2
+                return bought
+            },
+			      effect() { // Effects of owning x of the items, x is a decimal
+                let x = player.inf.dim2
+                let base = tmp.inf.buyables[12].base
+                return (Decimal.pow(base,x));
+            },
+			      display() { // Everything else displayed in the buyable button after the title
+                return "which will generate "+format(this.effect())+" Infinity Dimension I per second.\n\
+                Cost: " + format(tmp.inf.buyables[12].cost)+" Infinity Shards\n\
+                Effect: " + format(tmp.inf.buyables[12].effect)+"x\n\
+                Amount: " + formatWhole(getBuyableAmount("inf", 12))
+            },
+            unlocked() { return player.inf.unlocked }, 
+            canAfford() {
+                    return player.inf.points.gte(tmp.inf.buyables[12].cost)},
+            buy() { 
+                player[this.layer].points = player[this.layer].points.sub(this.cost())
+                player.inf.dim2 = player.inf.dim2.add(1).max(1)
+                player[this.layer].buyables[this.id] = player[this.layer].buyables[this.id].add(1).max(1)
+            },
+         },
+    13: {
+			title: "Infinity Dimension III",
+        cost() { 
+                let x = player.inf.dim3
+                let cost = Decimal.pow(1e3, x)
+                return cost
+               },
+            base() { 
+                return new Decimal(10)
+            },
+            total() {
+                let total = getBuyableAmount("inf", 13)
+                return total
+            },
+            bought() {
+                let bought = player.inf.dim3
+                return bought
+            },
+			      effect() { // Effects of owning x of the items, x is a decimal
+                let x = player.inf.dim3
+                let base = tmp.inf.buyables[13].base
+                return (Decimal.pow(base,x));
+            },
+			      display() { // Everything else displayed in the buyable button after the title
+                return "which will generate "+format(this.effect())+" Infinity Dimension II per second.\n\
+                Cost: " + format(tmp.inf.buyables[13].cost)+" Infinity Shards\n\
+                Effect: " + format(tmp.inf.buyables[13].effect)+"x\n\
+                Amount: " + formatWhole(getBuyableAmount("inf", 13))
+            },
+            unlocked() { return player.inf.unlocked }, 
+            canAfford() {
+                    return player.inf.points.gte(tmp.inf.buyables[13].cost)},
+            buy() { 
+                player[this.layer].points = player[this.layer].points.sub(this.cost())
+                player.inf.dim3 = player.inf.dim3.add(1).max(1)
+                player[this.layer].buyables[this.id] = player[this.layer].buyables[this.id].add(1).max(1)
+            },
+        },
+    14: {
+			title: "Infinity Dimension IV",
+        cost() { 
+                let x = player.inf.dim4
+                let cost = Decimal.pow(1e4, x)
+                return cost
+               },
+            base() { 
+                return new Decimal(10)
+            },
+            total() {
+                let total = getBuyableAmount("inf", 11)
+                return total
+            },
+            bought() {
+                let bought = player.inf.dim4
+                return bought
+            },
+			      effect() { // Effects of owning x of the items, x is a decimal
+                let x = player.inf.dim4
+                let base = tmp.inf.buyables[14].base
+                return (Decimal.pow(base,x));
+            },
+			      display() { // Everything else displayed in the buyable button after the title
+                return "which will generate "+format(this.effect())+" Infinity Dimension III per second.\n\
+                Cost: " + format(tmp.inf.buyables[14].cost)+" Infinity Shards\n\
+                Effect: " + format(tmp.inf.buyables[14].effect)+"x\n\
+                Amount: " + formatWhole(getBuyableAmount("inf", 14))
+            },
+            unlocked() { return player.inf.unlocked }, 
+            canAfford() {
+                    return player.inf.points.gte(tmp.inf.buyables[14].cost)},
+            buy() { 
+                player[this.layer].points = player[this.layer].points.sub(this.cost())
+                player.inf.dim4 = player.inf.dim4.add(1).max(1)
+                player[this.layer].buyables[this.id] = player[this.layer].buyables[this.id].add(1).max(1)
+            },
+        },
+  },
+    row: 7, // Row the layer is in on the tree (0 is the first row)
+    layerShown(){return (player.points.gte(1e277)||player.inf.unlocked)},
+   
 })
 addLayer("eter", {
     name: "Force", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -1235,6 +1370,12 @@ addLayer("eter", {
 		  	best: new Decimal(0),
 		  	total: new Decimal(0),
         time: new Decimal(0),
+        //Infinity Dims
+        eterpow: new Decimal(0),
+        dim1: new Decimal(0),
+        dim2: new Decimal(0),
+        dim3: new Decimal(0),
+        dim4: new Decimal(0),
     }},
     color: "#b341e0",
     prestigeButtonText() { 
@@ -1246,7 +1387,7 @@ addLayer("eter", {
     baseResource: "Infinity Shards", // Name of resource prestige is based on
     baseAmount() {return player.inf.points}, // Get the current amount of baseResource
     type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
-    exponent: 1.15, // Prestige currency exponent
+    exponent: 0.0085, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
         return mult
@@ -1254,7 +1395,164 @@ addLayer("eter", {
     gainExp() { // Calculate the exponent on main currency from bonuses
         return new Decimal(1)
     },
-    row: "side", // Row the layer is in on the tree (0 is the first row)
-    branches: [["inf","#d837a9"]],
-    layerShown(){return (player.inf.points.gte(1e176))},
+    update(diff) {
+        if (player.eter.buyables[11]) player.eter.eterpow = player.eter.eterpow.add((tmp.eter.buyables[11].effect).times(diff));
+    },
+    buyables: {
+    11: {
+			title: "Eternity Dimension I",
+        cost() { 
+                let x = player.eter.dim1
+                let cost = Decimal.pow(10, x)
+                return cost
+               },
+            base() { 
+                return new Decimal(1)
+            },
+            total() {
+                let total = getBuyableAmount("eter", 11)
+                return total
+            },
+            bought() {
+                let bought = player.eter.dim1
+                return bought
+            },
+			      effect() { // Effects of owning x of the items, x is a decimal
+                let x = player.eter.dim1
+                let base = tmp.eter.buyables[11].base
+                return (Decimal.times(base,x));
+            },
+			      display() { // Everything else displayed in the buyable button after the title
+                return "Reduce the distance between shards by "+format(this.base())+".\n\
+                Cost: " + format(tmp.eter.buyables[11].cost)+" Eternity Shards\n\
+                Effect: " + format(tmp.eter.buyables[11].effect)+"x\n\
+                Amount: " + formatWhole(getBuyableAmount("eter", 11))
+            },
+            unlocked() { return player.eter.unlocked }, 
+            canAfford() {
+                    return player.eter.points.gte(tmp.eter.buyables[11].cost)},
+            buy() { 
+                player[this.layer].points = player[this.layer].points.sub(this.cost())
+                player.eter.dim1 = player.eter.dim1.add(1).max(1)
+                player[this.layer].buyables[this.id] = player[this.layer].buyables[this.id].add(1).max(1)
+            },
+        },
+    12: {
+			title: "Eternity Dimension II",
+        cost() { 
+                let x = player.eter.dim2
+                let cost = Decimal.pow(1e2, x)
+                return cost
+               },
+            base() { 
+                return new Decimal(1)
+            },
+            total() {
+                let total = getBuyableAmount("eter", 12)
+                return total
+            },
+            bought() {
+                let bought = player.eter.dim2
+                return bought
+            },
+			      effect() { // Effects of owning x of the items, x is a decimal
+                let x = tmp.eter.buyables[12].total
+                let base = tmp.eter.buyables[12].base
+                return (Decimal.times(base,x));
+            },
+			      display() { // Everything else displayed in the buyable button after the title
+                return "Reduce the distance between shards by "+format(this.base())+".\n\
+                Cost: " + format(tmp.eter.buyables[12].cost)+" Eternity Shards\n\
+                Effect: " + format(tmp.eter.buyables[12].effect)+"x\n\
+                Amount: " + formatWhole(getBuyableAmount("eter", 12))
+            },
+            unlocked() { return player.eter.unlocked }, 
+            canAfford() {
+                    return player.eter.points.gte(tmp.eter.buyables[12].cost)},
+            buy() { 
+                player[this.layer].points = player[this.layer].points.sub(this.cost())
+                player.eter.dim2 = player.eter.dim2.add(1).max(1)
+                player[this.layer].buyables[this.id] = player[this.layer].buyables[this.id].add(1).max(1)
+            },
+         },
+    13: {
+			title: "Eternity Dimension III",
+        cost() { 
+                let x = player.eter.dim3
+                let cost = Decimal.pow(1e3, x)
+                return cost
+               },
+            base() { 
+                return new Decimal(1)
+            },
+            total() {
+                let total = getBuyableAmount("eter", 13)
+                return total
+            },
+            bought() {
+                let bought = player.eter.dim3
+                return bought
+            },
+			      effect() { // Effects of owning x of the items, x is a decimal
+                let x = tmp.eter.buyables[13].total
+                let base = tmp.eter.buyables[13].base
+                return (Decimal.times(base,x));
+            },
+			      display() { // Everything else displayed in the buyable button after the title
+                return "Reduce the distance between shards by "+format(this.base())+".\n\
+                Cost: " + format(tmp.eter.buyables[13].cost)+" Eternity Shards\n\
+                Effect: " + format(tmp.eter.buyables[13].effect)+"x\n\
+                Amount: " + formatWhole(getBuyableAmount("eter", 13))
+            },
+            unlocked() { return player.eter.unlocked }, 
+            canAfford() {
+                    return player.eter.points.gte(tmp.eter.buyables[13].cost)},
+            buy() { 
+                player[this.layer].points = player[this.layer].points.sub(this.cost())
+                player.eter.dim3 = player.eter.dim3.add(1).max(1)
+                player[this.layer].buyables[this.id] = player[this.layer].buyables[this.id].add(1).max(1)
+            },
+        },
+    14: {
+			title: "Eternity Dimension IV",
+        cost() { 
+                let x = player.eter.dim4
+                let cost = Decimal.pow(1e4, x)
+                return cost
+               },
+            base() { 
+                return new Decimal(1)
+            },
+            total() {
+                let total = getBuyableAmount("eter", 11)
+                return total
+            },
+            bought() {
+                let bought = player.eter.dim4
+                return bought
+            },
+			      effect() { // Effects of owning x of the items, x is a decimal
+                let x = tmp.eter.buyables[14].total
+                let base = tmp.eter.buyables[14].base
+                return (Decimal.times(base,x));
+            },
+			      display() { // Everything else displayed in the buyable button after the title
+                return "Reduce the distance between shards by "+format(this.base())+".\n\
+                Cost: " + format(tmp.eter.buyables[14].cost)+" Eternity Shards\n\
+                Effect: " + format(tmp.eter.buyables[14].effect)+"x\n\
+                Amount: " + formatWhole(getBuyableAmount("eter", 14))
+            },
+            unlocked() { return player.eter.unlocked }, 
+            canAfford() {
+                    return player.eter.points.gte(tmp.eter.buyables[14].cost)},
+            buy() { 
+                player[this.layer].points = player[this.layer].points.sub(this.cost())
+                player.eter.dim4 = player.eter.dim4.add(1).max(1)
+                player[this.layer].buyables[this.id] = player[this.layer].buyables[this.id].add(1).max(1)
+            },
+        },
+  },
+    row: 8, // Row the layer is in on the tree (0 is the first row)
+    branches: [["inf","#b341e0"]],
+    layerShown(){return (player.inf.points.gte(1e176)||player.eter.unlocked)},
 })
