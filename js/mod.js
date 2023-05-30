@@ -81,7 +81,6 @@ function canGenPoints(){
 
 function getPointCap() {
   let cap = new Decimal(1e10)
-  if (inChallenge("sp",13)) cap = cap.log10().pow(3)
   if (inChallenge("sp",21)) cap = cap.log10()
   if (!inChallenge("sp",13)) cap = cap.times(tmp.t.getTSPUpgsDil)
   if ((player.a.unlocked)&&(!inChallenge("sp",13))) cap = cap.pow(tmp.a.getShDistEff)
@@ -93,7 +92,6 @@ function getPointGen() {
 		return new Decimal(0)
 
 	let gain = new Decimal(1)
-  let cap = new Decimal(1e10)
   if ((player.ee.unlocked)&&((inChallenge("sp",13))||inChallenge("sp",21))) gain = gain.add(player.ee.points.add(1).pow(0.01))
   if ((player.bh.unlocked)&&(hasChallenge("sp",21))) gain = gain.add(player.bh.points.add(1).log10().div(2))
   if ((hasUpgrade('ee',11))&&(inChallenge("sp",13))||inChallenge("sp",21)) gain = gain.times(1000)
@@ -103,7 +101,7 @@ function getPointGen() {
   if (hasChallenge("sp",13)&&(!inChallenge("sp",21))) gain = gain.add(player.points.add(1).pow(0.05))
   if (player.p.unlocked) gain = gain.times(player.p.points.add(1).pow(1.05))
   if ((player.p.unlocked)&&((inChallenge("sp",11))&&(player.p.points.gte(5)))) gain = gain.times(player.p.points.add(1).pow(player.p.points.div(2)))
-  if (hasUpgrade('p',11)||(!inChallenge("sp",11))) gain = gain.times(10)
+  if (hasUpgrade('p',11)) gain = gain.times(10)
   if (hasUpgrade('p',11)||inChallenge("sp",11)) gain = gain.add((player.points.add(1)).log10())
   if (hasChallenge("sp",11)&&(!inChallenge("sp",21))) gain = gain.pow(1.15)
   if (hasUpgrade('p',12)) gain = gain.times(upgradeEffect('p', 12))
@@ -124,7 +122,6 @@ function getPointGen() {
   gain = gain.times(tmp.a.getBE2)
   if (player.points.gte(1e30)) gain = gain.cbrt().times(1e9)
   if (player.points.gte(1e45)) gain = gain.pow(0.25).times(1e16)
-  if (inChallenge("a",11)) gain = gain.div(tmp.a.getShDisRatio.times((challengeCompletions("a", 11).add(1))))
   if (player.points.gte(getPointCap())) gain = gain.times(0)
   return gain
 }
