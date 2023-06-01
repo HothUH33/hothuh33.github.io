@@ -783,36 +783,6 @@ addLayer("ee", {
     unlocked() { return (inChallenge("sp",13))},
      },
     },
-  buyables: {
-        11: {
-			title: "ES Gain",
-        cost(x) { return new Decimal(2).pow(x.add(1).div(3)) },
-            base() { 
-                return new Decimal(1.05)
-            },
-            total() {
-                let total = getBuyableAmount("ee", 11)
-                return total
-            },
-			effect() { // Effects of owning x of the items, x is a decimal
-                let x = tmp.ee.buyables[11].total
-                let base = tmp.ee.buyables[11].base
-                return (Decimal.pow(base,x));
-            },
-			display() { // Everything else displayed in the buyable button after the title
-                return "Multiply Existence Shard gain after challenge nerf by "+format(this.base())+".\n\
-                Cost: " + format(tmp.ee.buyables[11].cost)+" Existence Essence\n\
-                Effect: " + format(tmp.ee.buyables[11].effect)+"x\n\
-                Amount: " + formatWhole(getBuyableAmount("ee", 11))
-            },
-            unlocked() { return inChallenge("sp",21) }, 
-            canAfford() {
-                    return player.ee.points.gte(tmp.ee.buyables[11].cost)},
-            buy() { 
-                player[this.layer].points = player[this.layer].points.sub(this.cost())
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-            }
-        },
   },
     branches: [["p","#dddddd"]],
     hotkeys: [
