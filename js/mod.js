@@ -112,7 +112,7 @@ function getPointGen() {
   if (inChallenge("sp",13)) gain = gain.add(player.points.pow(0.005))
   if (inChallenge("sp",13)) gain = gain.div(player.points.add(1).pow(0.75))
   if (inChallenge("sp",21)) gain = gain.times(5000).pow(-0.5)
-  if (player.ee.buyables[11]&&(inChallenge("sp",21))) gain = gain.times(buyableEffect('ee',11))
+  if (player.ee.buyables[11]) gain = gain.times(buyableEffect('ee',11))
   if ((player.bh.unlocked)&&(inChallenge("sp",21))) gain = gain.add(player.bh.points.add(1).log2().div(1000))
   if (hasChallenge("sp",21)&&(!inChallenge("sp",21))) gain = gain.pow(player.points.add(1).pow(0.005))
   if (player.points.gte(1e15)) gain = gain.sqrt().times(250)
