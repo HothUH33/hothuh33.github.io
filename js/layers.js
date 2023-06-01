@@ -54,7 +54,7 @@ addLayer("p", {
         effect() {              
           let eff = new Decimal(1)
           if (!hasMilestone('p',1)) eff = eff.times(10)
-          if (hasMilestone('p',1)) eff = eff.times(tmp.p.getUpg1Boost().pow(0.25)
+          if (hasMilestone('p',1)) eff = eff.times(tmp.p.getUpg1Boost.pow(0.25)
           return eff
        },
     effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
