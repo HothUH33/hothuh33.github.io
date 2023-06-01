@@ -37,9 +37,21 @@ addLayer("p", {
     ],
     layerShown(){return true},
       upgrades: {11: {title: "Fabric of Everything",
-    description: "Decuple your Existence Shard gain.",
-    cost: new Decimal(2),       
-     },          12: {title: "Reality Formation",
+    description() {              
+          let desc = ""
+          if (!hasMilestone('p',1)) desc = "Decuple your Existence Shard gain"
+          if (hasMilestone('p',1)) desc = "Multiply your Existence Shard gain based on ALL row1 upgrades (except first one)."
+          return eff
+       },
+    cost: new Decimal(2),
+        effect() {              
+          let eff = new Decimal(1)
+          if (!hasMilestone('p',1)) eff = eff.times(10)
+          if (hasMilestone('p',1)) eff = eff.times((upgradeEffect(this.layer,12).add(upgradeEffect(this.layer,13).add(upgradeEffect(this.layer,14).add(upgradeEffect(this.layer,15)))))).pow(0.25)
+          return eff
+       },
+    effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
+    },           12: {title: "Reality Formation",
     description: "Multiply your Existence Shard gain by Primordial Essence.",
     cost: new Decimal(4),
         effect() {
@@ -85,6 +97,10 @@ addLayer("p", {
     0: {
         requirementDescription: "Primal Reality (5 Primordial Essence)",
         effectDescription: "Unlock Space and Time layers",
+        done() { return player.p.best.gte(5)},
+    },1: {
+        requirementDescription: "Pre-Inflation Reality (25 Primordial Essence)",
+        effectDescription: "Change <h3>Fabric of Everything</h3> upgrade effect",
         done() { return player.p.best.gte(5)},
     },
    },
@@ -950,12 +966,6 @@ addLayer("ac", {
 				tooltip: "Complete the Anti-Shard Supremacy and Shattered Existence challenges.",
 				image: "images/achs/13.png",
 			},
-			24: {
-				name: "The Pain is Gone... I hope so...",
-				done() { return player.sp.challenges.length>=4 },
-				tooltip: "Complete all Space challenges.",
-				image: "images/achs/14.png",
-			},
 			25: {
 				name: "Black Hole MUST be nerfed!",
 				done() { return player.bh.points.gte(1e12) },
@@ -989,7 +999,7 @@ addLayer("ac", {
 			34: {
 				name: "Are You <h3 style=opacity:0.5>Reading</h3> His Book?",
 				done() { return tmp.a.getShDistRatio>=6.2e9 },
-				tooltip: "Reduce the distance to 15 light-years.",
+				tooltip: "Reduce the distance to 15 light-years.<br><h3 style=opacity:0.25>This is a reference to one of mod author</h3>.",
 				image: "images/achs/14.png",
 			},
 			35: {
@@ -1086,29 +1096,7 @@ addLayer("stat", {
             }],
             ],
         },
-                "Spelling": {
-                        content: [
-                                ["display-text", function(){
-                                        let corr = numCorrectLetters(player.targetWord)
-                                        let wordUpper = player.targetWord.toLocaleUpperCase()
-                                        let start = "<bdi style='font-size: 300%'>"
-                                        let goodPart = "<bdi style='color:#FF0000'>" + wordUpper.slice(0,corr) + "</bdi>"
-                                        let badPart  = "<bdi style='color:#993333'>" + wordUpper.slice(corr) + "</bdi>"
-                                        return start + goodPart + badPart + "</bdi>"
-                                }],
-                                ["display-text", function(){
-                                        let a = "You have spelled " + formatWhole(player.wordsSpelled)
-                                        let b = " words correctly!"
-                                        let c = "<br><br><br><br><br><br>"
-                                        let d = "<br>Press space to get a new word.<br>This is just a minigame, so you can safely ignore it :)"
-                                        return c + c + a + b + d
-                                }],
-                        ],
-                        unlocked(){
-                                return true
-                        }
-                },
-        },
+      },
     bars: {
         rti: {
             direction: RIGHT,
