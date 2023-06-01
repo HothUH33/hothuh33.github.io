@@ -34,7 +34,6 @@ addLayer("p", {
           if (hasUpgrade('p',13)) eff = eff.add(upgradeEffect('p',13))
           if (hasUpgrade('p',14)) eff = eff.add(upgradeEffect('p',14))
           if (hasUpgrade('p',15)) eff = eff.add(upgradeEffect('p',15))
-	  eff = eff.pow(0.25)
           return eff },
     effectDescription() {
 			return "which are multiplying E.S. gain by "+format(player.p.points.add(1).pow(1.05))+"x"
@@ -55,7 +54,7 @@ addLayer("p", {
         effect() {              
           let eff = new Decimal(1)
           if (!hasMilestone('p',1)) eff = eff.times(10)
-          if (hasMilestone('p',1)) eff = eff.times(tmp.p.getUpg1Boost())
+          if (hasMilestone('p',1)) eff = eff.times(tmp.p.getUpg1Boost().pow(0.25)
           return eff
        },
     effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
