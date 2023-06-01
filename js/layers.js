@@ -866,8 +866,8 @@ addLayer("bh", {
             function () {
                 if (player.tab == "bh") { 
                 let a = ""
-		if (inChallenge("sp",21)) a = "If you reset now (hotkey: B), you will gain "+formatWhole(tmp[this.layer].resetGain+" Black Hole masses"
-    		if (hasChallenge("sp",21)) a = "You will gain "+formatWhole(tmp[this.layer].resetGain+" Black Hole masses every second"
+		if (inChallenge("sp",21)) a = "<h2>If you reset now (hotkey: B), you will gain "+formatWhole(tmp[this.layer].resetGain+" Black Hole masses</h2>"
+    		if (hasChallenge("sp",21)) a = "<h2>You will gain "+formatWhole(tmp[this.layer].resetGain+" Black Hole masses every second</h2>"
                 return a
                 }
             }]
