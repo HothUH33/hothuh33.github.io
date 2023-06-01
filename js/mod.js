@@ -81,7 +81,7 @@ function canGenPoints(){
 
 function getPointCap() {
   let cap = new Decimal(1e10)
-  if (inChallenge("sp",21)) cap = cap.log10()
+  if (inChallenge("sp",21)) cap = cap.log10().pow(3).times(5)
   if (!inChallenge("sp",13)) cap = cap.times(tmp.t.getTSPUpgsDil)
   if ((player.a.unlocked)&&(!inChallenge("sp",13))) cap = cap.pow(tmp.a.getShDistEff)
   return cap
