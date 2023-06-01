@@ -1,4 +1,12 @@
+function slog(n){ // slog10(x), .slog is bugged >=eee9e15
+	n = new Decimal(n)
+	return Decimal.add(n.layer,new Decimal(n.mag).slog())
+}
 
+function slogadd(n,add){
+	n = new Decimal(n)
+	return Decimal.tetrate(10,slog(n).add(add))
+}
 function exponentialFormat(num, precision, mantissa = true) {
     let e = num.log10().floor()
     let m = num.div(Decimal.pow(10, e))
@@ -102,12 +110,40 @@ function distShort(s) {
 	return format(s.div(scale1[id])) + scale2[id]
 }
 
+function verseTime(years) {
+	s = slog(new Decimal(years)).sub(Decimal.log10(9))
+	let verse1 = [2,3,4,5]
+	let verse2 = ["multi","meta","xeno","hyper"]
+	let id = 0;
+		if (s.gte(verse1[verse1.length - 1])) id = verse1.length - 1;
+		else {
+			while (s.gte(verse1[id])) id++;
+			if (id > 0) id--;
+		}
+	let mag = slogadd(years,-verse1[id]+1).div(1e9)
+	return [mag,verse2[id]]
+}
 function formatTimeLong1(s) {
 	s = new Decimal(s)
 	let years = s.div(31556952)
-  let bhera = years.div(1e100)
-  if (bhera.gte(10)) return format(bhera.div(10)) + " dark eras"
-  if (years.gte(1e100)) return format(years.div(1e100)) + " black hole eras"
+	let mlt = verseTime(years)
+	let arv1 = [1,1e15,1e30,1e45,1e60,1e75,1e90,1e105]
+	let arv2 = ["","mega","giga","tera","peta","exa","zetta","yotta"]
+	let id = 0;
+		if (mlt[0].gte(arv1[arv1.length - 1])) id = arv1.length - 1;
+		else {
+			while (mlt[0].gte(arv1[id])) id++;
+			if (id > 0) id--;
+		}
+	let verse = arv2[id]+(arv2[id]!=""?"-":"")+mlt[1]
+	if (mlt[1]=="multi") {
+		verse = arv2[id]
+		if (arv2[id]=="") verse = "multi"}
+	if (years.gte("6pt9")) return format(slog(years).pow10().div(9e6)) + " omniverse ages"
+	if (years.gte("eee56") && years.lt("eee69")) return format(years.log10().log10().div(1e56)) + " new big bangs"
+	if (years.gte("ee120") && years.lt("eee9")) return format(years.log10().div(1e120)) + " big rips"
+	if (years.gte("ee9")) return format(mlt[0].div(arv1[id])) + " " + verse +"verse ages"
+	if (years.gte(1e100)) return format(years.div(1e100)) + " black hole eras"
 	if (years.gte(1e40)) return format(years.div(1e40)) + " degenerate eras"
 	if (years.gte(1e9)) return format(years.div(1e9)) + " aeons"
 	if (years.gte(1e3)) return format(years.div(1e3)) + " millenia"
