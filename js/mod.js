@@ -120,7 +120,8 @@ function getPointGen() {
   if (player.points.gte(1e15)&&(hasUpgrade('t',12))) gain = gain.pow(1.35)
   gain = gain.times(tmp.a.getBE2)
   if (player.points.gte(1e30)) gain = gain.cbrt().times(1e9)
-  if (player.points.gte(1e45)) gain = gain.pow(0.25).times(1e16)
+  if (player.points.gte(1e45)) gain = gain.pow(0.25).times(1e16) 
+  if (gain.lte(1e-10)) gain = gain.times(1e10)
   if (player.points.gte(getPointCap())) gain = gain.times(0)
   return gain
 }
