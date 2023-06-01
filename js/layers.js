@@ -41,7 +41,7 @@ addLayer("p", {
           let desc = ""
           if (!hasMilestone('p',1)) desc = "Decuple your Existence Shard gain"
           if (hasMilestone('p',1)) desc = "Multiply your Existence Shard gain based on ALL row1 upgrades (except first one)."
-          return eff
+          return desc
        },
     cost: new Decimal(2),
         effect() {              
