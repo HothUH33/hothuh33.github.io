@@ -30,10 +30,10 @@ addLayer("p", {
     },
     getUpg1Boost() {
 	  let eff = new Decimal(1)
-          if (hasUpgrade('p',12)) eff = eff.add(UpgradeEffect('p',12))
-          if (hasUpgrade('p',13)) eff = eff.add(UpgradeEffect('p',13))
-          if (hasUpgrade('p',14)) eff = eff.add(UpgradeEffect('p',14))
-          if (hasUpgrade('p',15)) eff = eff.add(UpgradeEffect('p',15))
+          if (hasUpgrade('p',12)) eff = eff.add(upgradeEffect('p',12))
+          if (hasUpgrade('p',13)) eff = eff.add(upgradeEffect('p',13))
+          if (hasUpgrade('p',14)) eff = eff.add(upgradeEffect('p',14))
+          if (hasUpgrade('p',15)) eff = eff.add(upgradeEffect('p',15))
 	  eff = eff.pow(0.25)
           return eff },
     effectDescription() {
