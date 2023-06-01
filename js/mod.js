@@ -99,7 +99,6 @@ function getPointGen() {
   if ((hasUpgrade('ee',13))&&(inChallenge("sp",13))||inChallenge("sp",21)) gain = gain.times(100000)
   if ((hasUpgrade('ee',13))&&(inChallenge("sp",13))||inChallenge("sp",21)) gain = gain.pow(1.5)
   if (hasChallenge("sp",13)&&(!inChallenge("sp",21))) gain = gain.add(player.points.add(1).pow(0.05))
-  if (player.p.unlocked) gain = gain.times(player.p.points.add(1).pow(1.05))
   if ((player.p.unlocked)&&((inChallenge("sp",11))&&(player.p.points.gte(5)))) gain = gain.times(player.p.points.add(1).pow(player.p.points.div(2)))
   if (hasUpgrade('p',11)) gain = gain.times(upgradeEffect('p', 11))
   if (hasUpgrade('p',11)||inChallenge("sp",11)) gain = gain.add((player.points.add(1)).log10())
