@@ -862,7 +862,15 @@ addLayer("bh", {
             function() {if (player.tab == "bh") return "main-display"},
             function() {if (player.tab == "bh") return "resource-display"},
             "blank",
-            "upgrades",
+	    ["raw-html", 
+            function () {
+                if (player.tab == "bh") { 
+                let a = ""
+		if (inChallenge("sp",21)) a = "If you reset now (hotkey: B), you will gain "+formatWhole(tmp[this.layer].resetGain+" Black Hole masses"
+    		if (hasChallenge("sp",21)) a = "You will gain "+formatWhole(tmp[this.layer].resetGain+" Black Hole masses every second"
+                return a
+                }
+            }]
             "buyables",
           ]},
         "Stats": { // From AD NG+++
