@@ -86,7 +86,9 @@ addLayer("p", {
 	let lim = Decimal(1000)
 	let eff = ebase.min(lim)
 	if (player.a.unlocked) lim = lim.times(10)
-	if (player.f.unlocked&&(player.s.unlocked)) = lim = lim.times(1.78e304)
+	if (player.f.unlocked&&(player.s.unlocked)) lim = lim.times(1.78e304)
+	if (player.inf.unlocked) lim = lim.add("ee308")
+	if (player.eter.unlocked) lim = lim.add("1F308")
         return eff
     },
     effectDisplay() { return "/"+format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
