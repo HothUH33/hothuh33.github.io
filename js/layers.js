@@ -839,7 +839,7 @@ addLayer("bh", {
     		if (hasChallenge("sp",21)) a = "<h2>You will gain "+formatWhole(tmp[this.layer].resetGain.times(tmp.bh.passiveGeneration))+" Black Hole masses every second ("+format(tmp.bh.passiveGeneration.times(100))+"%)</h2>"
                 return a
                 }
-            }]
+            }],
             "buyables",
           ]},
         "Stats": { // From AD NG+++
