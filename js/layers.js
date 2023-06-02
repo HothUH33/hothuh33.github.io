@@ -783,7 +783,6 @@ addLayer("ee", {
     unlocked() { return (inChallenge("sp",13))},
      },
     },
-  },
     branches: [["p","#dddddd"]],
     hotkeys: [
         {key: "shift+c", description: "Shift+C: Reset for Existence Essence (works only in Shattered Existence challenge)", onPress(){if ((canReset(this.layer))&&(inChallenge("sp", 13))) doReset(this.layer)}},
