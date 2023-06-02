@@ -866,7 +866,7 @@ addLayer("bh", {
     layerShown(){return ((inChallenge("sp", 21))||hasChallenge("sp",21))},
 		passiveGeneration() {
 		 			let pg = new Decimal(1)
-					if (hasChallenge("sp",21) pg = pg.add(0.20)
+					if (hasChallenge("sp",21)) pg = pg.add(0.20)
 					if (hasUpgrade('a',21)) pg = pg.add(0.10)
 					if (hasUpgrade('a',22)) pg = pg.add(0.10)
 					if (hasUpgrade('a',23)) pg = pg.add(0.10)
