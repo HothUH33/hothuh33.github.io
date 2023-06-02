@@ -115,7 +115,7 @@ addLayer("p", {
     },1: {
         requirementDescription: "Pre-Inflation Reality (25 Primordial Essence)",
         effectDescription: "Change <h3>Fabric of Everything</h3> upgrade effect",
-        done() { return player.p.best.gte(5)},
+        done() { return player.p.best.gte(25)},
     },
    },
 })
