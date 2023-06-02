@@ -83,7 +83,7 @@ addLayer("p", {
     cost: new Decimal(12),    
         effect() {
         let ebase = player.points.add(1).pow(0.3)
-	let lim = Decimal(1000)
+	let lim = new Decimal(1000)
 	let eff = ebase.min(lim)
 	if (player.a.unlocked) lim = lim.times(10)
 	if (player.f.unlocked&&(player.s.unlocked)) lim = lim.times(1.78e304)
