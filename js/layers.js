@@ -836,7 +836,7 @@ addLayer("bh", {
                 if (player.tab == "bh") { 
                 let a = ""
 		if (inChallenge("sp",21)) a = "<h2>If you reset now (hotkey: B), you will gain "+formatWhole(tmp[this.layer].resetGain)+" Black Hole masses</h2>"
-    		if (hasChallenge("sp",21)) a = "<h2>You will gain "+formatWhole(tmp[this.layer].resetGain.times(tmp.bh.passiveGeneration))+" Black Hole masses every second ("+format(tmp.bh.passiveGeneration.times(100))+"%)</h2>"
+    		if (hasChallenge("sp",21)) a = "<h2>You will gain "+formatWhole(tmp[this.layer].resetGain.times(tmp.bh.passiveGeneration))+" Black Hole masses every second ("+formatWhole(tmp.bh.passiveGeneration.times(100))+"%)</h2>"
                 return a
                 }
             }],
@@ -865,7 +865,7 @@ addLayer("bh", {
     ],
     layerShown(){return ((inChallenge("sp", 21))||hasChallenge("sp",21))},
 		passiveGeneration() {
-		 			let pg = new Decimal(1)
+		 			let pg = new Decimal(0)
 					if (hasChallenge("sp",21)) pg = pg.add(0.20)
 					if (hasUpgrade('a',21)) pg = pg.add(0.10)
 					if (hasUpgrade('a',22)) pg = pg.add(0.10)
