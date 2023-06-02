@@ -835,8 +835,8 @@ addLayer("bh", {
             function () {
                 if (player.tab == "bh") { 
                 let a = ""
-		if (inChallenge("sp",21)) a = "<h2>If you reset now (hotkey: B), you will gain "+formatWhole(tmp[this.layer].resetGain+" Black Hole masses</h2>"
-    		if (hasChallenge("sp",21)) a = "<h2>You will gain "+formatWhole(tmp[this.layer].resetGain+" Black Hole masses every second</h2>"
+		if (inChallenge("sp",21)) a = "<h2>If you reset now (hotkey: B), you will gain "+formatWhole(tmp[this.layer].resetGain)+" Black Hole masses</h2>"
+    		if (hasChallenge("sp",21)) a = "<h2>You will gain "+formatWhole(tmp[this.layer].resetGain.times(tmp.bh.passiveGeneration))+" Black Hole masses every second ("+format(tmp.bh.passiveGeneration.times(100))+"%)</h2>"
                 return a
                 }
             }]
@@ -864,7 +864,13 @@ addLayer("bh", {
         {key: "b", description: "B: Reset for Black Hole mass", onPress(){if ((canReset(this.layer))&&((inChallenge("sp", 21)))) doReset(this.layer)}},
     ],
     layerShown(){return ((inChallenge("sp", 21))||hasChallenge("sp",21))},
-		passiveGeneration() { return (hasChallenge("sp",21))?0.25:0 },
+		passiveGeneration() {
+		 			let pg = new Decimal(1)
+					if (hasChallenge("sp",21) pg = pg.add(0.20)
+					if (hasUpgrade('a',21)) pg = pg.add(0.10)
+					if (hasUpgrade('a',22)) pg = pg.add(0.10)
+					if (hasUpgrade('a',23)) pg = pg.add(0.10)
+		      return pg},
 })
 addLayer("null", {
     name: "Blank", // This is optional, only used in a few places, If absent it just uses the layer id.
