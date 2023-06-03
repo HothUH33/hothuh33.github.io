@@ -1570,7 +1570,7 @@ addLayer("eter", {
     unlocked()  {return true},
     layerShown() { return true},
     shouldNotify(){
-        return player.lore.lT<layers.lorer.currReq()&&player.tab!='lore'
+        return player.lore.lT<layers.lore.currReq()&&player.tab!='lore'
     },
 
       infoboxes: {
