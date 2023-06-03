@@ -1575,7 +1575,7 @@ addLayer("eter", {
     },
 
       infoboxes: {
-        story: {
+        lore: {
             title() {
                 if (player.lore.lc==0) return "Ch.1: The Great Creation";
                 if (player.lore.lc==1) return "Ch.2: Primordial Existence";
