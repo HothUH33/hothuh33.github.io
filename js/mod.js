@@ -21,7 +21,7 @@ let changelog = `<h1>Changelog:</h1><br><br>
   <i>Note: the number of layers in every update, where they are adding, it means amount of permanently unlockable layers (example: Black Hole layer)!</i><br><br> 
   <h2>v0.4 - A New Headstart</h2><br>
   - Implemented some features for Aether, Space and Time layers.<br>
-  - Fixed the <h3 style>Existenceless</h3> challenge nerf.<br>
+  - Fixed the <h3 style = 'color:#bb00ff; text-shadow: #bb00ff 0px 0px 10px;'>Existenceless</h3> challenge nerf.<br>
   - Added the hardcap to Existence Shards (can be dilated).<br>
   - Added new two rows of achievements. (images to them in development)<br>
   - Added the Infinity and Eternity layer, but they are unreachable now... (9 layers in total)<br>
