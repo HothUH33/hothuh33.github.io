@@ -1562,8 +1562,9 @@ addLayer("eter", {
 
     name: "Lore", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "L",
-    color: "396c86",       // The color for this layer, which affects many elements.
+    color: "#396c86",       // The color for this layer, which affects many elements.
     type: "none",//不被重置
+    tooltip() {return "Lore"},
     row: "side",
     position:4,
 
@@ -1636,7 +1637,7 @@ addLayer("eter", {
     },
     currentColor(){
         let color = "#98f898";
-        if (player.lore.lcolor==0) color = "#00bdf9";
+        if (player.lore.lc==0) color = "#00bdf9";
         if (player.lore.lc==1) color = "#FFFFFF";
         if (player.lore.lc==2) color = "#5E33FF";
         if (player.lore.lc==3) color = "#222222";
