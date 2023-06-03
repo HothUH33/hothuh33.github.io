@@ -1647,9 +1647,8 @@ addLayer("eter", {
     tabFormat: [
         "blank", 
         "clickables",
-        ["infobox","story",{'border-color':function(){return layers.lore.currentColor()}}],
-        ["bar","storybar"],
-        "upgrades",
+        ["infobox","lore",{'border-color':function(){return layers.lore.currentColor()}}],
+        ["bar","lorebar"],
     ],
 
     bars: {
