@@ -69,13 +69,20 @@ addLayer("p", {
     description: "Multiply your Existence Shard gain by itself, but harden P.E. requirement based on itself.",
     cost: new Decimal(6),
         effect() {
-        return player.points.plus(1).log2().pow(2).div(6).times(upgradeEffect('p',14)).plus(1)
+        let eff = new Decimal(1)
+				if (!hasUpgrade('p',14)) eff = eff.times(player.points.plus(1).log2().pow(2).div(6))
+				if (hasUpgrade('p',14)) eff = eff.times(player.points.plus(1).log2().pow(2).div(6)).times(upgradeEffect('p',14)).plus(1)
+        return eff
     },
     effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x"},
      },          14: {title: "Density Growth",
     description: "Enhance <h3>Space-Time Formation</h3> first effect by Primordial Essence.",
     cost: new Decimal(8),    
-        effect() { return player.p.points.add(1).log2()
+        effect() { 
+        let eff = new Decimal(1)
+				if (!hasUpgrade('sp',15)) eff = eff.times(player.p.points.add(1).log2())
+				if (hasUpgrade('sp',15)) eff = eff.times(player.p.points.add(1).log2()).times(upgradeEffect('sp',15)).plus(1)
+        return eff
     },
     effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
      },           15: {title: "Singularity Formation",
@@ -83,12 +90,12 @@ addLayer("p", {
     cost: new Decimal(12),    
         effect() {
         let ebase = player.points.add(1).pow(0.3)
-	let lim = new Decimal(1000)
-	if (player.a.unlocked) lim = lim.times(10)
-	if (player.f.unlocked&&(player.s.unlocked)) lim = lim.times(1.78e304)
-	if (player.inf.unlocked) lim = lim.add("ee308")
-	if (player.eter.unlocked) lim = lim.add("1F308")
-	let eff = ebase.min(lim)
+        let lim = new Decimal(1000)
+				if (player.a.unlocked) lim = lim.times(10)
+				if (player.f.unlocked&&(player.s.unlocked)) lim = lim.times(1.78e304)
+				if (player.inf.unlocked) lim = lim.add("ee308")
+				if (player.eter.unlocked) lim = lim.add("1F308")
+				let eff = ebase.min(lim)
         return eff
     },
     effectDisplay() { return "/"+format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
@@ -130,6 +137,7 @@ addLayer("sp", {
 		  	best: new Decimal(0),
 		  	total: new Decimal(0),
         time: new Decimal(0),
+			  spacepow: new Decimal(0),
 			  unlockOrder: 0,
     }},
     color: "#BB00FF",
@@ -146,6 +154,10 @@ addLayer("sp", {
     gainExp() { // Calculate the exponent on main currency from bonuses
         return new Decimal(1)
     },
+	  update(diff) {
+        if (hasUpgrade('sp',11)) player.sp.spacepow = player.sp.spacepow.times(diff));
+        if (hasUpgrade('sp',13)) player.sp.spacepow = player.sp.spacepow.times(upgradeEffect('sp',13)).times(diff));
+    },
     resetTime() {},
     row: 1, // Row the layer is in on the tree (0 is the first row)
 		increaseUnlockOrder: ["t"],
@@ -153,17 +165,40 @@ addLayer("sp", {
     hotkeys: [
         {key: "s", description: "S: Reset for Space", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
-    layerShown(){return (hasMilestone("p", 0))},
+    layerShown(){return (hasMilestone("p", 0))||player.sp.unlocked},
     upgrades: {
-     11: {title: "Theory of Shards",
-    description: "Multiply Existence Shard gain by number, which based on itself, Space and Time, but harden P.E. requirement.",
-    cost: new Decimal(1),
+     11: {title: "Theory of Space",
+    description: "Start generating the Space Power.",
+    cost: new Decimal(1), 
+     },
+     12: {title: "Inflation Epoch",
+    description: "Dilate the hardcap start by 1e7. (Total: 1e12)",
+    cost: new Decimal(2),
+		unlocked() {return (hasUpgrade('sp',11)) },
+     },
+     13: {title: "Space-Time Expansion",
+    description: "Multiply Space Power gain based on Black Hole masses",
+    cost: new Decimal(3),
           effect() {
-          return player.points.add(player.sp.points.add(player.t.points).add(0.1)).pow(0.15)},
+          return player.bh.points.add(1).pow(0.1)},
     effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
+		unlocked() {return (hasUpgrade('sp',12)) },
+     },
+     14: {title: "Electroweak Epoch",
+    description: "Dilate the hardcap start by 1e13. (Total: 1e35)",
+    cost: new Decimal(4),
+		unlocked() {return (hasUpgrade('sp',13)) },
+     },
+     15: {title: "Theory of Shards",
+    description: "Enhance the <h3>Density Growth</h3> upgrade effect, but harden P.E. requirement.",
+    cost: new Decimal(5),
+          effect() {
+          return player.sp.spacepow.add(1).pow(0.1)},
+    effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
+		unlocked() {return (hasUpgrade('sp',14)) },
      },
      21: {title: "Theory of Everything",
-    description: "Unlock the Force [W.I.P.!]",
+    description: "Unlock the Force [W.I.P.]",
     
     cost: new Decimal(10),
      },
@@ -269,7 +304,7 @@ addLayer("t", {
         if (hasUpgrade('t',15)) dil = dil.times(1e15)
       return dil
     },
-    layerShown(){return (hasMilestone("p", 0))},
+    layerShown(){return (hasMilestone("p", 0)||player.t.unlocked)},
     upgrades: 
     {  11: {title: "Theory of Big Bang",
     description: "Dilate the hardcap start by 1e5.",
@@ -279,14 +314,18 @@ addLayer("t", {
     description: "Raises Existence Shard gain after softcap to ^1.15.",
     cost: new Decimal(3),
 		unlocked() {return (hasUpgrade('t',11)) },
-     },13: {title: "Theory of Everyone",
-    description: "Unlock the Soul [W.I.P.!]",
+     },13: {title: "The Reality Time",
+    description: "Dilate the hardcap start by 1e10. (Total: 1e22)",
     cost: new Decimal(4),
 		unlocked() {return (hasUpgrade('t',12)) },
      },14: {title: "Time Ascension",
-    description: "Allows you to see the current <h3>hardcap</h3> start",
+    description: "Allows you to see the current <h3>hardcap</h3> start.",
     cost: new Decimal(5),
 		unlocked() {return (hasUpgrade('t',13)) },
+     },15: {title: "Theory of Everyone",
+    description: "Dilate the hardcap start by 1e15. (Total: 1e50)",
+    cost: new Decimal(6),
+		unlocked() {return (hasUpgrade('t',14)) },
      },21: {title: "Theory of Everyone",
     description: "Unlock the Soul [W.I.P.!]",
     cost: new Decimal(10),
@@ -752,7 +791,6 @@ addLayer("ee", {
 		  	best: new Decimal(0),
 		  	total: new Decimal(0),
         time: new Decimal(0),
-        chalgoal: new Decimal(5000),
     }},
     color: "#BBBBBB",
     requires: new Decimal(1), // Can be a function that takes requirement increases into account
@@ -963,6 +1001,12 @@ addLayer("ac", {
 				tooltip: "Complete the Anti-Shard Supremacy and Shattered Existence challenges.",
 				image: "images/achs/13.png",
 			},
+			24: {
+				name: "The Pain is Gone... I hope so...",
+				done() { return player.sp.challenges.length>=4 },
+				tooltip: "Complete the Anti-Shard Supremacy and Shattered Existence challenges.",
+				image: "images/achs/24.png",
+			},
 			25: {
 				name: "Black Hole MUST be nerfed!",
 				done() { return player.bh.points.gte(1e12) },
@@ -996,19 +1040,19 @@ addLayer("ac", {
 			34: {
 				name: "Are You <h3 style=opacity:0.5>Reading</h3> His Book?",
 				done() { return tmp.a.getShDistRatio>=6.2e9 },
-				tooltip: "Reduce the distance to 15 light-years.<br><h3 style=opacity:0.25>This is a reference to one of mod author</h3>.",
+				tooltip: "Reduce the distance to 15 light-years.",
 				image: "images/achs/14.png",
 			},
 			35: {
 				name: "ARE YA FU**ING SERIIOUS!?",
 				done() { return player.points.gte(1e20) },
-				tooltip: "???",
+				tooltip: "Reach 1e20 Existence Shards",
 				image: "images/achs/15.png",
 			},
 			36: {
-				name: "Aetherize Aether",
-				done() { return player.a.points.gte(100) },
-				tooltip: "Unlock the ???.",
+				name: "From Sun to Neptune...",
+				done() { return tmp.a.getShDistRatio>=5881420169190128 },
+				tooltip: "Reduce the distance to 1 AU.",
 				image: "images/achs/15.png",
 			},
     },
@@ -1036,7 +1080,7 @@ addLayer("stat", {
                 let time21c = (player.points.sub(100).div(getPointGen()))
                 let a = "You have <h2 style='color:#ffccff; text-shadow: #ffccff 0px 0px 10px;'>"+ formatWhole(player.points) +" ("+formatWhole(getPointGen())+"/s)</h2> Existence Shards.<br>"
                 let b = "You have <h2 style = 'color:#ffffff; text-shadow: #ffffff 0px 0px 10px;'>"+formatWhole(player.p.points)+"</h2> Primordial Essences.<br>"
-                let c = player.sp.unlocked?"You have <h2 style = 'color:#bb00ff; text-shadow: #bb00ff 0px 0px 10px;'>"+formatWhole(player.sp.points)+"</h2> Spaces.<br>":""
+                let c = player.sp.unlocked?"You have <h2 style = 'color:#bb00ff; text-shadow: #bb00ff 0px 0px 10px;'>"+formatWhole(player.sp.points)+"</h2> Spaces <h2 style = 'color:#bb00ff; text-shadow: #bb00ff 0px 0px 10px;'>"+formatWhole(player.sp.spacepow)+".</h2><br>":""
                 let d = player.t.unlocked?"You have <h2 style = 'color:#0066ff; text-shadow: #0066ff 0px 0px 10px;'>"+formatWhole(player.t.points)+"</h2> Times.<br>":""
                 let e = player.a.unlocked?"You have <h2 style = 'color:#bb00bb; text-shadow: #bb00bb 0px 0px 10px;'>"+formatWhole(player.a.points)+"</h2> Aethers.<br>":""
                 let f = player.ee.unlocked&&(inChallenge("sp",13)||inChallenge("sp",21))?"You have <h2 style = color:#bbbbbb;>"+formatWhole(player.ee.points)+" ("+formatWhole((player.points.pow(1.25).times(tmp.ee.passiveGeneration)))+"/s)</h2> Existence Essences.<br>":""
@@ -1044,6 +1088,7 @@ addLayer("stat", {
                 let h = player.f.unlocked?"You have <h2 style = color:#f56d53;>"+formatWhole(player.t.points)+"</h2> Forces.<br>":""
                 let i = player.s.unlocked?"You have <h2 style = color:#4bfc90;>"+formatWhole(player.s.points)+"</h2> Souls.<br><br>":""
                 let inf = player.inf.unlocked?"You have <h2 style = color:#4bfc90;>"+formatWhole(player.inf.points)+"</h2> Infinity Shards and <h2 style = color:#4bfc90;>"+formatWhole(player.inf.infpow)+"</h2> Infinity Power.<br><br>":""
+                let eter = player.eter.unlocked?"You have <h2 style = color:#4bfc90;>"+formatWhole(player.eter.points)+"</h2> Infinity Shards and <h2 style = color:#4bfc90;>"+formatWhole(player.eter.eterpow)+"</h2> Infinity Power.<br><br>":""
                 let sp13 = inChallenge("sp",13)?"<h3>Shattered Existence</h3> progress <h2 style = color:#6ae67e;>"+format((player.points.div(5000)).times(100).min(100))+"%</h2>.<br>":""
                 let sp13t = inChallenge("sp",13)&&!player.points.gte(5000)?"If your Existence Shard gain remains constant, the challenge goal will be reached in <h2 style = color:#ff0000;>"+formatTime(time13)+"</h2><br>":""
                 let sp13c = inChallenge("sp",13)&&player.points.gte(5000)?"Challenge goal was reached <h2 style = color:#6ae67e;>"+formatTime(time13c)+"</h2> ago<br>":""
@@ -1051,8 +1096,9 @@ addLayer("stat", {
                 let sp21t = inChallenge("sp",21)&&!player.points.gte(100)?"If your Existence Shard gain remains constant, the challenge goal will be reached in <h2 style = color:#ff0000;>"+formatTime(time21)+"</h2><br>":""
                 let sp21c = inChallenge("sp",21)&&player.points.gte(100)?"Challenge goal was reached <h2 style = color:#6ae67e;>"+formatTime(time21c)+"</h2> ago<br>":""
                 let t = (player.null.points.add(1.78e308).div(getPointGen().add(1)))
-                let inft = "If Existence Shard gain remains constant, then you can reach Infinity in "+formatTime(t)+""
-                return a+b+c+d+e+f+g+h+i+inf+sp13+sp13t+sp13c+sp21+sp21t+sp21c+inft
+                let inft = "If Existence Shard gain remains constant, then you can reach Infinity in "+formatTimeLong1(t.pow(t))+""
+                let inft += ", "+formatTimeLong1(t)+""
+                return a+b+c+d+e+f+g+h+i+inf+eter+sp13+sp13t+sp13c+sp21+sp21t+sp21c+inft
                 }
             }],
             "blank",
@@ -1569,7 +1615,7 @@ addLayer("eter", {
     position:4,
 
     unlocked()  {return true},
-    layerShown() { return true},
+    layerShown() { return false},
     shouldNotify(){
         return player.lore.lT<layers.lore.currReq()&&player.tab!='lore'
     },
