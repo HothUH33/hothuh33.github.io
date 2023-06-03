@@ -13,14 +13,22 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.3.2",
-	name: "S.C.a.BH.",
+	num: "0.4",
+	name: "A New Headstart",
 }
 
-let changelog = `<h1>Changelog:</h1><br>
+let changelog = `<h1>Changelog:</h1><br><br> 
+  <i>Note: the number of layers in every update, where they are adding, it means amount of permanently unlockable layers (example: Black Hole layer)!</i><br><br> 
+  <h2>v0.4 - A New Headstart</h2><br>
+  - Implemented some features for Aether, Space and Time layers.<br>
+  - Fixed the <h3 style>Existenceless</h3> challenge nerf.<br>
+  - Added the hardcap to Existence Shards (can be dilated).<br>
+  - Added new two rows of achievements. (images to them in development)<br>
+  - Added the Infinity and Eternity layer, but they are unreachable now... (9 layers in total)<br>
+  <br>
   <h3>v0.3.2 - Stats, Challenge and Black Hole!</h3><br>
   - Added new challenge in Space layer.<br>
-  - Added Black Hole layer.<br>
+  - Added Black Hole layer. (7 layers in total)<br>
   - Added Statistics, where you can see resources and challenge completion.<br>
   - Added new number formatting for Black Hole layer.<br>
   <br>
