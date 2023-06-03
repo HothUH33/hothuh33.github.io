@@ -1562,7 +1562,7 @@ addLayer("eter", {
 
     name: "Lore", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "L",
-    color() {return GlowingColor("#ff0000",10,"#00ff00",10,"#0000ff")},       // The color for this layer, which affects many elements.
+    color() {return GlowingColor("#aa0000",10,"#00aa00",10,"#0000aa")},       // The color for this layer, which affects many elements.
     type: "none",//不被重置
     row: "side",
     position:4,
