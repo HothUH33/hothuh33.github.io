@@ -1097,7 +1097,6 @@ addLayer("stat", {
                 let sp21c = inChallenge("sp",21)&&player.points.gte(100)?"Challenge goal was reached <h2 style = color:#6ae67e;>"+formatTime(time21c)+"</h2> ago<br>":""
                 let t = (player.null.points.add(1.78e308).div(getPointGen().add(1)))
                 let inft = "If Existence Shard gain remains constant, then you can reach Infinity in "+formatTimeLong1(t.pow(t))+""
-                let inft += ", "+formatTimeLong1(t)+""
                 return a+b+c+d+e+f+g+h+i+inf+eter+sp13+sp13t+sp13c+sp21+sp21t+sp21c+inft
                 }
             }],
