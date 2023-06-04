@@ -155,8 +155,8 @@ addLayer("sp", {
         return new Decimal(1)
     },
 	  update(diff) {
-        if (hasUpgrade('sp',11)) player.sp.spacepow = player.sp.spacepow.times(diff));
-        if (hasUpgrade('sp',13)) player.sp.spacepow = player.sp.spacepow.times(upgradeEffect('sp',13)).times(diff));
+        if (hasUpgrade('sp',11)) player.sp.spacepow = player.sp.spacepow.times(diff);
+        if (hasUpgrade('sp',13)) player.sp.spacepow = player.sp.spacepow.times(upgradeEffect('sp',13)).times(diff);
     },
     resetTime() {},
     row: 1, // Row the layer is in on the tree (0 is the first row)
