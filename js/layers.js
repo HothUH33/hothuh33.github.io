@@ -72,7 +72,7 @@ addLayer("p", {
         let eff = new Decimal(1)
 				if (!hasUpgrade('p',14)) eff = eff.times(player.points.plus(1).log2().pow(2).div(6))
 				if (hasUpgrade('p',14)) eff = eff.times(player.points.plus(1).log2().pow(2).div(6)).times(upgradeEffect('p',14)).plus(1)
-        return eff
+        return eff.max(1)
     },
     effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x"},
      },          14: {title: "Density Growth",
@@ -82,7 +82,7 @@ addLayer("p", {
         let eff = new Decimal(1)
 				if (!hasUpgrade('sp',15)) eff = eff.times(player.p.points.add(1).log2())
 				if (hasUpgrade('sp',15)) eff = eff.times(player.p.points.add(1).log2()).times(upgradeEffect('sp',15)).plus(1)
-        return eff
+        return eff.max(1)
     },
     effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
      },           15: {title: "Singularity Formation",
@@ -881,7 +881,7 @@ addLayer("bh", {
                 if (player.tab == "bh") { 
                 let a = ""
 		if (inChallenge("sp",21)) a = "<h2>If you reset now (hotkey: B), you will gain "+formatWhole(tmp[this.layer].resetGain)+" Black Hole masses</h2>"
-    		if (hasChallenge("sp",21)) a = "<h2>You will gain "+formatWhole(tmp[this.layer].resetGain.times(tmp.bh.passiveGeneration))+" Black Hole masses every second ("+formatWhole(tmp.bh.passiveGeneration.times(100))+"%)</h2>"
+    		if (hasChallenge("sp",21)) a = "<h2>You gain "+formatWhole(tmp[this.layer].resetGain.times(tmp.bh.passiveGeneration))+" Black Hole masses every second ("+formatWhole(tmp.bh.passiveGeneration.times(100))+"%)</h2>"
                 return a
                 }
             }],
@@ -1080,7 +1080,7 @@ addLayer("stat", {
                 let time21c = (player.points.sub(100).div(getPointGen()))
                 let a = "You have <h2 style='color:#ffccff; text-shadow: #ffccff 0px 0px 10px;'>"+ formatWhole(player.points) +" ("+formatWhole(getPointGen())+"/s)</h2> Existence Shards.<br>"
                 let b = "You have <h2 style = 'color:#ffffff; text-shadow: #ffffff 0px 0px 10px;'>"+formatWhole(player.p.points)+"</h2> Primordial Essences.<br>"
-                let c = player.sp.unlocked?"You have <h2 style = 'color:#bb00ff; text-shadow: #bb00ff 0px 0px 10px;'>"+formatWhole(player.sp.points)+"</h2> Spaces <h2 style = 'color:#bb00ff; text-shadow: #bb00ff 0px 0px 10px;'>"+formatWhole(player.sp.spacepow)+".</h2><br>":""
+                let c = player.sp.unlocked?"You have <h2 style = 'color:#bb00ff; text-shadow: #bb00ff 0px 0px 10px;'>"+formatWhole(player.sp.points)+"</h2> Spaces <h2 style = 'color:#bb00ff; text-shadow: #bb00ff 0px 0px 10px;'>"+formatWhole(player.sp.spacepow)+"</h2> Space Powers.<br>":""
                 let d = player.t.unlocked?"You have <h2 style = 'color:#0066ff; text-shadow: #0066ff 0px 0px 10px;'>"+formatWhole(player.t.points)+"</h2> Times.<br>":""
                 let e = player.a.unlocked?"You have <h2 style = 'color:#bb00bb; text-shadow: #bb00bb 0px 0px 10px;'>"+formatWhole(player.a.points)+"</h2> Aethers.<br>":""
                 let f = player.ee.unlocked&&(inChallenge("sp",13)||inChallenge("sp",21))?"You have <h2 style = color:#bbbbbb;>"+formatWhole(player.ee.points)+" ("+formatWhole((player.points.pow(1.25).times(tmp.ee.passiveGeneration)))+"/s)</h2> Existence Essences.<br>":""
