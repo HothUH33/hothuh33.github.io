@@ -21,18 +21,18 @@ let VERSION = {
 let changelog = `<h1>Changelog:</h1><br><br> 
   <i>Note: the number of layers in every update, where they are adding, it means amount of permanently unlockable layers (example: Black Hole layer)!</i><br><br> 
   <h3>v0.4. Patch 1</h3><br>
-  - Fixed "Density Growth" zero-effect bug.
-  - Fixed description to Space in Stats tab.
+  - Some bugfixes.<br>
+  <br>
   <h2>v0.4 - A New Headstart</h2><br>
   - Implemented some features for Aether, Space and Time layers.<br>
   - Fixed the <h3 style = 'color:#bb00ff; text-shadow: #bb00ff 0px 0px 10px;'>Existenceless</h3> challenge nerf.<br>
   - Added the hardcap to Existence Shards (can be dilated).<br>
   - Added new two rows of achievements. (images to them in development)<br>
-  - Added the Infinity and Eternity layer, but they are unreachable now... (9 layers in total)<br>
+  - Added the <h3 style = 'color:#b67f33; text-shadow: #b67f33 0px 0px 10px;'>Infinity</h3> and <h3 style = 'color:#b341e0; text-shadow: #b341e0 0px 0px 10px;'>Eternity</h3> layer, but they are unreachable now... (9 layers in total)<br>
   <br>
   <h3>v0.3.2 - Stats, Challenge and Black Hole!</h3><br>
   - Added new challenge in Space layer.<br>
-  - Added Black Hole layer. (7 layers in total)<br>
+  - Added <h3 style = 'color:#222222; text-shadow: #222222 0px 0px 10px;'>Black Hole</h3> layer. (7 layers in total)<br>
   - Added Statistics, where you can see resources and challenge completion.<br>
   - Added new number formatting for Black Hole layer.<br>
   <br>
