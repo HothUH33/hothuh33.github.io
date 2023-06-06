@@ -14,11 +14,15 @@ let modInfo = {
 // Set your version in num and name
 let VERSION = {
 	num: "0.4",
+	patch: 1,
 	name: "A New Headstart",
 }
 
 let changelog = `<h1>Changelog:</h1><br><br> 
   <i>Note: the number of layers in every update, where they are adding, it means amount of permanently unlockable layers (example: Black Hole layer)!</i><br><br> 
+  <h3>v0.4. Patch 1</h3><br>
+  - Fixed "Density Growth" zero-effect bug.
+  - Fixed description to Space in Stats tab.
   <h2>v0.4 - A New Headstart</h2><br>
   - Implemented some features for Aether, Space and Time layers.<br>
   - Fixed the <h3 style = 'color:#bb00ff; text-shadow: #bb00ff 0px 0px 10px;'>Existenceless</h3> challenge nerf.<br>
