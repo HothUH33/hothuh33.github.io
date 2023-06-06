@@ -54,7 +54,7 @@ addLayer("p", {
         effect() {              
           let eff = new Decimal(1)
           if (!hasMilestone('p',1)) eff = eff.times(10)
-          if (hasMilestone('p',1)) eff = eff.times(tmp.p.getUpg1Boost.pow(0.5))
+          if (hasMilestone('p',1)) eff = eff.times(tmp.p.getUpg1Boost.pow(0.5)).max(1.5)
           return eff
        },
     effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
@@ -70,9 +70,9 @@ addLayer("p", {
     cost: new Decimal(6),
         effect() {
         let eff = new Decimal(1)
-				if (!hasUpgrade('p',14)) eff = eff.times(player.points.plus(1).log2().pow(2).div(6))
-				if (hasUpgrade('p',14)) eff = eff.times(player.points.plus(1).log2().pow(2).div(6)).times(upgradeEffect('p',14)).plus(1)
-        return eff.max(1)
+				if (!hasUpgrade('p',14)) eff = eff.times(player.points.plus(1).log2().pow(2).div(6)).max(1)
+				if (hasUpgrade('p',14)) eff = eff.times(player.points.plus(1).log2().pow(2).div(6)).times(upgradeEffect('p',14)).plus(1).max(1)
+        return eff
     },
     effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x"},
      },          14: {title: "Density Growth",
@@ -80,9 +80,9 @@ addLayer("p", {
     cost: new Decimal(8),    
         effect() { 
         let eff = new Decimal(1)
-				if (!hasUpgrade('sp',15)) eff = eff.times(player.p.points.add(1).log2())
-				if (hasUpgrade('sp',15)) eff = eff.times(player.p.points.add(1).log2()).times(upgradeEffect('sp',15)).plus(1)
-        return eff.max(1)
+				if (!hasUpgrade('sp',15)) eff = eff.times(player.p.points.add(1).log2()).max(1)
+				if (hasUpgrade('sp',15)) eff = eff.times(player.p.points.add(1).log2()).times(upgradeEffect('sp',15)).plus(1).max(1)
+        return eff
     },
     effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
      },           15: {title: "Singularity Formation",
@@ -92,9 +92,9 @@ addLayer("p", {
         let ebase = player.points.add(1).pow(0.3)
         let lim = new Decimal(1000)
 				if (player.a.unlocked) lim = lim.times(10)
-				if (player.f.unlocked&&(player.s.unlocked)) lim = lim.times(1.78e304)
-				if (player.inf.unlocked) lim = lim.add("ee308")
-				if (player.eter.unlocked) lim = lim.add("1F308")
+				if (player.f.unlocked&&(player.s.unlocked)) new Decimal(1.798e308)
+				if (player.inf.unlocked) lim = new Decimal("ee308")
+				if (player.eter.unlocked) lim = new Decimal("1F308")
 				let eff = ebase.min(lim)
         return eff
     },
