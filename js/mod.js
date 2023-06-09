@@ -128,7 +128,7 @@ function getPointGen() {
   if ((player.bh.unlocked)&&(inChallenge("sp",21))) gain = gain.add(player.bh.points.add(1).log2().div(1000))
   if (hasChallenge("sp",21)&&(!inChallenge("sp",21))) gain = gain.pow(player.points.add(1).pow(0.005))
   if (gain.gte(1e15)) gain = gain.div(1e15).sqrt().times(1e15)
-  if (gain.points.gte(1e15)&&(hasUpgrade('t',11))) gain = gain.pow(1.15)
+  if (gain.gte(1e15)&&(hasUpgrade('t',11))) gain = gain.pow(1.15)
   gain = gain.times(tmp.a.getBE2)
   if (gain.gte(1e30)) gain = gain.div(1e30).cbrt().times(1e30)
   if (gain.gte(1e45)) gain = gain.div(1e45).pow(0.25).times(1e45)
