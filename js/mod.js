@@ -22,6 +22,7 @@ let changelog = `<h1>Changelog:</h1><br><br>
   <i>Note: the number of layers in every update, where they are adding, it means amount of permanently unlockable layers (example: Black Hole layer)!</i><br><br> 
   <h3>v0.4. Patch 1</h3><br>
   - Some bugfixes.<br>
+  - Fixed mistake regarding softcap.<br>
   <br>
   <h2>v0.4 - A New Headstart</h2><br>
   - Implemented some features for Aether, Space and Time layers.<br>
@@ -126,11 +127,11 @@ function getPointGen() {
   if (inChallenge("sp",21)) gain = gain.times(5000).pow(-0.5)
   if ((player.bh.unlocked)&&(inChallenge("sp",21))) gain = gain.add(player.bh.points.add(1).log2().div(1000))
   if (hasChallenge("sp",21)&&(!inChallenge("sp",21))) gain = gain.pow(player.points.add(1).pow(0.005))
-  if (player.points.gte(1e15)) gain = gain.sqrt().times(250)
-  if (player.points.gte(1e15)&&(hasUpgrade('t',12))) gain = gain.pow(1.35)
+  if (gain.gte(1e15)) gain = gain.div(1e15).sqrt().times(1e15)
+  if (gain.points.gte(1e15)&&(hasUpgrade('t',11))) gain = gain.pow(1.35)
   gain = gain.times(tmp.a.getBE2)
-  if (player.points.gte(1e30)) gain = gain.cbrt().times(1e9)
-  if (player.points.gte(1e45)) gain = gain.pow(0.25).times(1e16) 
+  if (gain.gte(1e30)) gain = gain.div(1e30).cbrt().times(1e30)
+  if (gain.gte(1e45)) gain = gain.div(1e45).pow(0.25).times(1e45)
   if (gain.lte(1e-10)) gain = gain.times(1e10)
   if (player.points.gte(getPointCap())) gain = gain.times(0)
   return gain
