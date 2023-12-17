@@ -306,17 +306,3 @@ function versionCheck() {
 		player.beta = VERSION.beta;
 	}
 }
-var saveInterval = setInterval(function () {
-	if (player === undefined)
-		return;
-	if (tmp.gameEnded && !player.keepGoing)
-		return;
-	if (options.autosave)
-		save();
-}, 5000);
-
-window.onbeforeunload = () => {
-    if (player.autosave) {
-        save();
-    }
-};
