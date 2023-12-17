@@ -4,5 +4,4 @@ addLayer("m", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     row: 10,
     color: "#FFFFFF",
-   },
 })
