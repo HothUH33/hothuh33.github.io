@@ -4,7 +4,7 @@ let options = {}
 
 function getStartOptions() {
 	return {
-		autosave: true,
+		autosave: false,
 		msDisplay: "always",
 		theme: "default",
 		hqTree: false,
