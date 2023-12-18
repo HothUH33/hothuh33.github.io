@@ -7,9 +7,7 @@ addLayer("m", {
     tooltip: "Games",
     clickables:{  
         11: {
-            display() {
-                return a+cost
-            },
+            display() {return "The Tree of Existence and Reality<br>Version: v0.4<br>Last updated: 2022"},
             canClick() {return true},
             unlocked() {return true}, 
             onClick() {window.location.assign("https://hothuh33.github.io/The-ExisReality-Tree")},
@@ -19,6 +17,19 @@ addLayer("m", {
 	                  "border-color"(){return "rgba(0, 0, 0, 0.5)"}, 
                     "color"(){return "#aaaaaa"},
                     "background-color"(){return "#442244"},
+           },
+        },
+        21: {
+            display() {return "Omniverse Traveler<br>Version: v0.0.1<br>Last updated: Sep 2023"},
+            canClick() {return true},
+            unlocked() {return true}, 
+            onClick() {window.location.assign("https://omnitrav.glitch.me")},
+            style: {"min-height"(){return "150px"}, 
+                    "width"(){return "200px"},
+	                  "border": "4px solid",
+	                  "border-color"(){return "rgba(0, 0, 0, 0.5)"}, 
+                    "color"(){return "#aaaaaa"},
+                    "background-color"(){return "#882288"},
            },
         },
     },
