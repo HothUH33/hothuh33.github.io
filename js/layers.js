@@ -7,7 +7,7 @@ addLayer("m", {
     tooltip: "Games",
     clickables:{  
         11: {
-            display() {return "The Tree of Existence and Reality<br>Version: v0.4<br>Last updated: 2022"},
+            display() {return "<h3>The Tree of Existence and Reality<br>Version: v0.4<br>Last updated: Summer 2023<br>Status: Abandoned</h3>"},
             canClick() {return true},
             unlocked() {return true}, 
             onClick() {window.location.assign("https://hothuh33.github.io/The-ExisReality-Tree")},
@@ -20,7 +20,7 @@ addLayer("m", {
            },
         },
         21: {
-            display() {return "Omniverse Traveler<br>Version: v0.0.1<br>Last updated: Sep 2023"},
+            display() {return "<h3>Omniverse Traveler<br>Version: v0.0.1<br>Last updated: Sep 2023<br>Status: In development</h3>"},
             canClick() {return true},
             unlocked() {return true}, 
             onClick() {window.location.assign("https://omnitrav.glitch.me")},
